@@ -1,9 +1,13 @@
 package code
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+	"gorm.io/plugin/soft_delete"
+)
 
 /*
 进阶gorm
+
 	题目1：模型定义
 		假设你要开发一个博客系统，有以下几个实体：
 		User （用户）、 Post （文章）、 Comment （评论）。
@@ -45,16 +49,17 @@ type Comment struct {
 	Content string
 	PostID  int
 	UserID  int
+	IsDel   soft_delete.DeletedAt `gorm:"softDelete:flag"`
 }
 
-//编写Go代码，使用Gorm查询某个用户发布的所有文章及其对应的评论信息。
+// 编写Go代码，使用Gorm查询某个用户发布的所有文章及其对应的评论信息。
 func QueryPostDetailInfo(db *gorm.DB, userid int) []Post {
 	var posts []Post
 	db.Preload("Comments").Where("user_id = ? ", userid).Find(&posts)
 	return posts
 }
 
-//编写Go代码，使用Gorm查询评论数量最多的文章信息。
+// 编写Go代码，使用Gorm查询评论数量最多的文章信息。
 func QueryMaxCommentForPost(db *gorm.DB) Post {
 	var post Post
 	result := make(map[string]interface{})
@@ -64,9 +69,8 @@ func QueryMaxCommentForPost(db *gorm.DB) Post {
 }
 
 /*
-	为 Post 模型添加一个钩子函数，在文章创建时自动更新用户的文章数量统计字段
-	这个是文章创建以后 更新用户信息  所以是AfterCreate
-
+为 Post 模型添加一个钩子函数，在文章创建时自动更新用户的文章数量统计字段
+这个是文章创建以后 更新用户信息  所以是AfterCreate
 */
 func PublishPost(db *gorm.DB, post *Post) error {
 	return db.Create(post).Error
@@ -80,22 +84,21 @@ func (p *Post) AfterCreate(tx *gorm.DB) (err error) {
 }
 
 /*
-	为 Comment 模型添加一个钩子函数，在评论删除时检查文章的评论数量，
-	如果评论数量为 0，则更新文章的评论状态为 "无评论"。
-	删除 可用的hook  是BeforeDelete AfterDelete
-	这个是删除评论之后  所以也是AfterDelete
+为 Comment 模型添加一个钩子函数，在评论删除时检查文章的评论数量，
+如果评论数量为 0，则更新文章的评论状态为 "无评论"。
+删除 可用的hook  是BeforeDelete AfterDelete
+这个是删除评论之后  所以也是AfterDelete
 
-	延伸出另外一个钩子  就是创建评论后
-	看这个文章的评论状态 是不是 无评论
-	是的话  得给他清空这个字段 或者改成 有评论
-
-
+延伸出另外一个钩子  就是创建评论后
+看这个文章的评论状态 是不是 无评论
+是的话  得给他清空这个字段 或者改成 有评论
 */
 func (c *Comment) AfterDelete(tx *gorm.DB) (err error) {
 	//根据传来的c 查一下这个post还有没有评论
 	var count int64
-	tx.Raw("select count(1) from comments where   post_id = ?", c.PostID).Scan(&count)
+	tx.Raw("select count(1) from comments where   post_id = ? and is_del=0", c.PostID).Scan(&count)
 	if count == 0 { //如果没有评论了
+		//tx.Session(&gorm.Session{DryRun: true}).Model(&Post{}).Where("id = ?", c.PostID).Update("post_status", "无评论")
 		tx.Model(&Post{}).Where("id = ?", c.PostID).Update("post_status", "无评论")
 	}
 	return
@@ -106,18 +109,20 @@ func (c *Comment) AfterCreate(tx *gorm.DB) (err error) {
 	var post Post
 	tx.Where("id = ? ", c.PostID).First(&post)
 	// 如果状态为"无评论"，则改为"有评论"
-	if post.PostStatus == "无评论" {
+	if post.PostStatus == "无评论" || post.PostStatus == "" {
 		tx.Model(&post).Update("post_status", "有评论")
 	}
 	return
 }
 
-//发表评论
+// 发表评论
 func MakeComment(db *gorm.DB, comment *Comment) error {
 	return db.Create(comment).Error
 }
 
-//删除评论
+// 删除评论
 func DelectComment(db *gorm.DB, id int) {
-	db.Delete(&Comment{}, id)
+	var comment Comment
+	db.Where("id=?", id).First(&comment)
+	db.Delete(&comment, id)
 }

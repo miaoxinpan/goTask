@@ -1,10 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"gotask/phaseOne/task3/code"
 
-	"github.com/jmoiron/sqlx"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -27,22 +25,22 @@ func main() {
 	// fmt.Printf("添加了%d条账户信息\n", code.CreateAccountInfo(db))
 	// fmt.Println(code.AccounTrading(db, 1, 2, 100))
 
-	dbsqlx, err := sqlx.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/gormproject?charset=utf8mb4&parseTime=True&loc=Local")
-	if err != nil {
-		panic("failed to connect database")
-	}
+	// dbsqlx, err := sqlx.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/gormproject?charset=utf8mb4&parseTime=True&loc=Local")
+	// if err != nil {
+	// 	panic("failed to connect database")
+	// }
 	//插入数据还是用gorm框架实现   查询使用sqlx 来实现
 	// fmt.Printf("添加了%d条职工信息\n", code.CreateEmployInfo(db))
 	//技术部的字典项 是 1
-	fmt.Println(code.QueryDepartmentEmplInfo(dbsqlx, 1))
-	fmt.Println(code.QueryMaxSalaryEmployee(dbsqlx))
+	// fmt.Println(code.QueryDepartmentEmplInfo(dbsqlx, 1))
+	// fmt.Println(code.QueryMaxSalaryEmployee(dbsqlx))
 	//
-	var price float64 = 50
-	fmt.Printf("价格大于%.2f价格的书籍\n", price)
-	fmt.Println(code.QueryExpensiveBooks(dbsqlx, price))
+	// var price float64 = 50
+	// fmt.Printf("价格大于%.2f价格的书籍\n", price)
+	// fmt.Println(code.QueryExpensiveBooks(dbsqlx, price))
 
-	fmt.Println(code.QueryPostDetailInfo(db, 2))
-	fmt.Println(code.QueryMaxCommentForPost(db))
+	// fmt.Println(code.QueryPostDetailInfo(db, 2))
+	// fmt.Println(code.QueryMaxCommentForPost(db))
 	//新增一个文章 然后看钩子函数会不会触发
 	// newPost := &code.Post{
 	// 	Title:   "新文章标题",
@@ -60,5 +58,6 @@ func main() {
 	// code.MakeComment(db, comment3)
 	// code.MakeComment(db, comment4)
 	// code.MakeComment(db, comment5)
-	code.DelectComment(db, 27)
+	code.DelectComment(db, 1)
+
 }
