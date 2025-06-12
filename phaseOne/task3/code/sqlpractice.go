@@ -92,7 +92,7 @@ func UpdateStuInfo(db *gorm.DB, name string, grade int) Student {
 	return student
 }
 
-// 编写SQL语句删除 students 表中年龄小于 15 岁的学生记录。
+// 编写SQL语句删除 students 表中年龄小于 15 岁的学生记录。 age < 15
 func ConditionalDeleteStuInfo(db *gorm.DB, field string, condition string, param int) int64 {
 	result := db.Where(field+condition+"?", param).Delete(&Student{})
 	if result.Error != nil {
