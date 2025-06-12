@@ -1,8 +1,13 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"gotask/phaseOne/task4/blogPorject/config"
+
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
+	config.InitDB() // 初始化数据库
 	router := gin.Default()
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
