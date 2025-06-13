@@ -14,7 +14,8 @@ var DB *gorm.DB
 func InitDB() {
 	viper.SetConfigName("config") // 配置文件名(不带扩展名)
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath("./config")
+	//viper.AddConfigPath("./config")
+	viper.AddConfigPath("../config")
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("读取配置文件失败: %v", err)
 	}
