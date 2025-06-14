@@ -5,12 +5,14 @@ import (
 	"gotask/phaseOne/task4/blogPorject/config"
 	middleware "gotask/phaseOne/task4/blogPorject/middlewar"
 	"gotask/phaseOne/task4/blogPorject/structs"
+	"gotask/phaseOne/task4/blogPorject/utils"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
 func Login(username, password string) (string, error) {
+	utils.LogBusiness("Login")
 	var user structs.User
 	if err := config.DB.Where("username = ? AND password = ?", username, password).First(&user).Error; err != nil {
 		return "", errors.New("用户名或密码错误")
@@ -28,6 +30,7 @@ func Login(username, password string) (string, error) {
 }
 
 func Register(username, password, email string) error {
+	utils.LogBusiness("Register")
 	//先用一个sql 查询 是否有同名的或者同一个email的
 	var users []structs.User
 	err := config.DB.Where(" username = ? or email = ?", username, email).Find(&users)

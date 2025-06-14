@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"gotask/phaseOne/task4/blogPorject/structs"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +15,7 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "未提供Token"})
+			structs.RespondWithResult(c, http.StatusUnauthorized, "未提供Token", nil)
 			c.Abort()
 			return
 		}
@@ -29,7 +30,7 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 			return jwtSecret, nil
 		})
 		if err != nil || !token.Valid {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "无效的Token"})
+			structs.RespondWithResult(c, http.StatusUnauthorized, "无效的Token", nil)
 			c.Abort()
 			return
 		}

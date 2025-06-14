@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"gotask/phaseOne/task4/blogPorject/services"
+	"gotask/phaseOne/task4/blogPorject/structs"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -22,18 +23,15 @@ func Login(c *gin.Context) {
 		Password string `json:"password" binding:"required"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "参数错误"})
+		structs.RespondWithResult(c, http.StatusBadRequest, "参数错误", nil)
 		return
 	}
 	token, err := services.Login(req.Username, req.Password)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		structs.RespondWithResult(c, http.StatusUnauthorized, err.Error(), nil)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"message": "登录成功！",
-		"token":   token,
-	})
+	structs.RespondWithResult(c, http.StatusOK, "登录成功！", gin.H{"token": token})
 }
 
 // 注册
@@ -44,15 +42,14 @@ func Register(c *gin.Context) {
 		Email    string `json:"email" binding:"required"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "参数错误"})
+		structs.RespondWithResult(c, http.StatusBadRequest, "参数错误", nil)
 		return
 	}
 	err := services.Register(req.Username, req.Password, req.Email)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		structs.RespondWithResult(c, http.StatusUnauthorized, err.Error(), nil)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"message": "注册成功！",
-	})
+	structs.RespondWithResult(c, http.StatusOK, "注册成功！", nil)
+
 }
