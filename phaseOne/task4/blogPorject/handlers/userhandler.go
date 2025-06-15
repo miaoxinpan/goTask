@@ -11,8 +11,8 @@ import (
 func RegisterUserRoutes(r *gin.Engine) {
 	userGroup := r.Group("/user")
 	{
-		userGroup.POST("/login", Login)
-		userGroup.POST("/register", Register)
+		userGroup.POST("/login", Login)       // 登录
+		userGroup.POST("/register", Register) // 注册
 	}
 }
 

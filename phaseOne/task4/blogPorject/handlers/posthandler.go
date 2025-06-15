@@ -13,10 +13,11 @@ import (
 func RegisterPostRoutes(r *gin.Engine) {
 	postGroup := r.Group("/post")
 	{
-		postGroup.POST("/createpost", middleware.JWTAuthMiddleware(), CreatePost)
-		postGroup.GET("/getpostforid", middleware.JWTAuthMiddleware(), GetPostForId)
-		postGroup.POST("/updatepostforauthor", middleware.JWTAuthMiddleware(), UpdatePostForAuthor)
-		postGroup.GET("/all", GetAllPost)
+		postGroup.POST("/createpost", middleware.JWTAuthMiddleware(), CreatePost)                   // 发表文章
+		postGroup.GET("/getpostforid", middleware.JWTAuthMiddleware(), GetPostForId)                // 获取单个文章的详细信息(根据文章id来)
+		postGroup.POST("/updatepostforauthor", middleware.JWTAuthMiddleware(), UpdatePostForAuthor) //实现文章的更新功能，实现文章的删除功能。只有文章的作者才能操作自己的文章。
+		postGroup.GET("/getpostforuserid", middleware.JWTAuthMiddleware(), GetPostForUserId)        // 根据用户id获取用户发表过的文章
+		postGroup.GET("/all", GetAllPost)                                                           // 获取全部文章 根据发布时间排序 需要做分页
 	}
 }
 
@@ -24,19 +25,19 @@ func RegisterPostRoutes(r *gin.Engine) {
 func CreatePost(c *gin.Context) {
 	var post structs.Post = structs.Post{}
 	if err := c.ShouldBindJSON(&post); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "参数错误"})
+		structs.RespondWithResult(c, http.StatusBadRequest, "参数错误", nil)
 		return
 	}
 	userID, exists := c.Get("user_id")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "用户信息获取失败"})
+		structs.RespondWithResult(c, http.StatusUnauthorized, "用户信息获取失败", nil)
 		return
 	}
 	//post.UserID = uint(userID)  直接转报错
 	//通常通过 JWT 解析出来的 user_id 是 float64 类型，所以你需要先断言为 float64，再转换为 uint。
 	intUserId, ok := userID.(float64)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "用户ID类型错误"})
+		structs.RespondWithResult(c, http.StatusUnauthorized, "用户ID类型错误", nil)
 		return
 	}
 
@@ -44,12 +45,10 @@ func CreatePost(c *gin.Context) {
 	post.UserID = uint(intUserId)
 	err := services.CreatePost(post)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		structs.RespondWithResult(c, http.StatusUnauthorized, err.Error(), nil)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"message": "发布成功",
-	})
+	structs.RespondWithResult(c, http.StatusOK, "发布成功！", nil)
 }
 
 // 获取全部文章 根据发布时间排序 需要做分页
@@ -73,10 +72,10 @@ func GetAllPost(c *gin.Context) {
 	var total int64
 	err := services.GetAllPost(page, pageSize, &posts, &total)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		structs.RespondWithResult(c, http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
+	structs.RespondWithResult(c, http.StatusOK, "查询成功", gin.H{
 		"data":     posts,
 		"total":    total,
 		"page":     page,
@@ -89,27 +88,24 @@ func GetPostForId(c *gin.Context) {
 	p := c.Query("postId")
 	var postId uint
 	if p == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "参数错误,请检查参数!"})
+		structs.RespondWithResult(c, http.StatusUnauthorized, "参数错误,请检查参数!", nil)
 		return
 	}
 	_, err := fmt.Sscanf(p, "%d", &postId)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "postId参数格式错误!"})
+		structs.RespondWithResult(c, http.StatusBadRequest, "postId参数格式错误!", nil)
 		return
 	}
 	var post structs.Post
 	err = services.GetPostForId(postId, &post)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		structs.RespondWithResult(c, http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"message": "查询成功！",
-		"data":    post,
-	})
+	structs.RespondWithResult(c, http.StatusOK, "查询成功！", post)
 }
 
-//实现文章的更新功能，只有文章的作者才能更新自己的文章。实现文章的删除功能，只有文章的作者才能删除自己的文章。
+//实现文章的更新功能，实现文章的删除功能。只有文章的作者才能操作自己的文章。
 //根据postid 只能更新文章内容 校验userid是不是登录的的这个id
 
 func UpdatePostForAuthor(c *gin.Context) {
@@ -149,4 +145,28 @@ func UpdatePostForAuthor(c *gin.Context) {
 		return
 	}
 	structs.RespondWithResult(c, http.StatusOK, "更新成功！", nil)
+}
+
+// 根据用户id获取用户发表过的文章
+func GetPostForUserId(c *gin.Context) {
+	userID, exists := c.Get("user_id")
+	if !exists {
+		structs.RespondWithResult(c, http.StatusUnauthorized, "用户信息获取失败", nil)
+		return
+	}
+	//post.UserID = uint(userID)  直接转报错
+	//通常通过 JWT 解析出来的 user_id 是 float64 类型，所以你需要先断言为 float64，再转换为 uint。
+	id, ok := userID.(float64)
+	if !ok {
+		structs.RespondWithResult(c, http.StatusUnauthorized, "用户ID类型错误", nil)
+		return
+	}
+	var posts []structs.Post
+	err := services.GetPostForUserId(uint(id), &posts)
+	if err != nil {
+		structs.RespondWithResult(c, http.StatusInternalServerError, err.Error(), nil)
+		return
+	}
+	structs.RespondWithResult(c, http.StatusOK, "查询成功！", posts)
+
 }

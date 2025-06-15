@@ -44,7 +44,7 @@ func GetAllPost(page int, pageSize int, posts *[]structs.Post, total *int64) err
 //	}
 func GetPostForId(postId uint, post *structs.Post) error {
 	utils.LogBusiness("GetPostForId")
-	result := config.DB.Preload("Comments").Preload("User").First(post, postId)
+	result := config.DB.Preload("Comments").Preload("User").First(&post, postId)
 	return result.Error
 }
 
@@ -56,4 +56,9 @@ func UpdatePostForAuthor(postId uint, content string, opType string) error {
 		return config.DB.Model(&structs.Post{}).Where("id = ?", postId).Update("content", content).Error
 	}
 	return errors.New("不支持的操作类型")
+}
+func GetPostForUserId(userid uint, post *[]structs.Post) error {
+	utils.LogBusiness("GetPostForUserId")
+	err := config.DB.Preload("User").Where("user_id=?", userid).Find(&post).Error
+	return err
 }
