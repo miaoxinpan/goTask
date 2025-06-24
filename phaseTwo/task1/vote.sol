@@ -156,6 +156,7 @@ contract Vote {
             4,
             1
         ];
+        //先转成bytes
         bytes memory strBytes = bytes(s);
         uint256 i = 0;
         uint256 res = 0;
@@ -163,15 +164,17 @@ contract Vote {
             bool matched = false;
             // 优先匹配两个字符的罗马数字
             for (uint j = 0; j < 13; j++) {
+                //拿到romans的字符
                 bytes memory romanBytes = bytes(romans[j]);
+                //如果是2位的  并且 当前位+1 小于strBytes的长度（意思是还在这个strBytes里面） 并且strBytes 当前位的字符等于romanBytes第一位  下一位等于romanBytes第二位
                 if (
                     romanBytes.length == 2 &&
                     i + 1 < strBytes.length &&
                     strBytes[i] == romanBytes[0] &&
                     strBytes[i + 1] == romanBytes[1]
                 ) {
-                    res += values[j];
-                    i += 2;
+                    res += values[j]; //把对应的整数加上
+                    i += 2; //因为是2位的 所以跳过2个
                     matched = true;
                     break;
                 }
@@ -190,10 +193,72 @@ contract Vote {
         }
         return res;
     }
+    /**
+     * 5.合并两个有序数组 (Merge Sorted Array)
+     *  题目描述：将两个有序数组合并为一个有序数组。
+     * [1,3,5,7,9]
+     * [2,4,6,8,10]
+     *
+     */
+    function mergeArray(
+        uint256[] memory arr1,
+        uint256[] memory arr2
+    ) public pure returns (uint256[] memory) {
+        //结束条件  当两个指针都大于数组长度的时候
+        uint i = 0; //arr1 的指针
+        uint j = 0; //arr2 的指针
+        uint m = 0; //result 的指针
+        uint k = arr1.length; //arr1 的数组长度
+        uint l = arr2.length; //arr2 的数组长度
+        uint256[] memory result = new uint256[](k + l);
+        while (i < k && j < l) {
+            if (arr1[i] < arr2[j]) {
+                result[m] = arr1[i];
+                i++;
+            } else {
+                result[m] = arr2[j];
+                j++;
+            }
+            m++;
+        }
+        // 补充剩余部分
+        while (i < k) {
+            result[m++] = arr1[i++];
+        }
+        while (j < l) {
+            result[m++] = arr2[j++];
+        }
+        return result;
+    }
+    /**
+     * 6.二分查找 (Binary Search)
+     * 题目描述：在一个有序数组中查找目标值。
+     * [1,2,3]  index=2,length=3
+     * [1,2,3,4,5,6,7,8,9]
+     * 9/2=4.5
+     */
+    function binarySearch(
+        uint256[] memory arr1,
+        uint256 target
+    ) public pure returns (int256) {
+        uint256 start = 0;
+        uint256 end = arr1.length - 1;
+        if (arr1[0] == target) {
+            return 0;
+        }
+        while (start <= end) {
+            uint256 i = start + (end - start) / 2;
+            //如果大于目标值说明arr[i] 是end
+            if (arr1[i] == target) {
+                return int256(i);
+            } else if (arr1[i] < target) {
+                //如果小于目标值说明arr[i] 是start
+                start = i + 1;
+            } else if (arr1[i] > target) {
+                //都不是  就是相等
+                end = i - 1;
+            }
+        }
+        return -1;
+    }
 }
-/**
-    5.合并两个有序数组 (Merge Sorted Array)
-    题目描述：将两个有序数组合并为一个有序数组。
-    6.二分查找 (Binary Search)
-    题目描述：在一个有序数组中查找目标值。
- */
