@@ -18,7 +18,6 @@ npx hardhat ignition deploy ./ignition/modules/Lock.js
 2. 使用 Chainlink 的 feedData 预言机功能，计算 ERC20 和以太坊到美元的价格。
 3. 使用 UUPS/透明代理模式实现合约升级。
 4. 使用类似于 Uniswap V2 的工厂模式管理每场拍卖。
-D:\goproject\goTask\phaseTwo\task3\auctionMarket
 
 任务步骤
 1. 项目初始化
