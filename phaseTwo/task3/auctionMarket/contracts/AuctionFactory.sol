@@ -14,7 +14,10 @@ contract AuctionFactory {
         address nftAddress,
         uint256 tokenId,
         uint256 startPrice,
-        uint256 duration
+        uint256 duration,
+        address usdc,
+        address dai,
+        address priceOracle
     ) external returns (address) {
         // 部署新拍卖合约
         Auction auction = new Auction(
@@ -22,7 +25,10 @@ contract AuctionFactory {
             nftAddress,
             tokenId,
             startPrice,
-            duration
+            duration,
+            usdc,
+            dai,
+            priceOracle
         );
         allAuctions.push(address(auction));
         emit AuctionCreated(address(auction), msg.sender);
@@ -45,31 +51,4 @@ contract AuctionFactory {
         return allAuctions.length;
     }
     //批量创建拍卖合约
-    function createAuctions(
-        address[] calldata nftAddresses,
-        uint256[] calldata tokenIds,
-        uint256[] calldata startPrices,
-        uint256[] calldata durations
-    ) external returns (address[] memory) {
-        require(
-            nftAddresses.length == tokenIds.length &&
-                tokenIds.length == startPrices.length &&
-                startPrices.length == durations.length,
-            "Array length mismatch"
-        );
-        address[] memory created = new address[](nftAddresses.length);
-        for (uint i = 0; i < nftAddresses.length; i++) {
-            Auction auction = new Auction(
-                msg.sender,
-                nftAddresses[i],
-                tokenIds[i],
-                startPrices[i],
-                durations[i]
-            );
-            allAuctions.push(address(auction));
-            emit AuctionCreated(address(auction), msg.sender);
-            created[i] = address(auction);
-        }
-        return created;
-    }
 }
