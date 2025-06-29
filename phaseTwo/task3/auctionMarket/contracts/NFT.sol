@@ -7,8 +7,13 @@ import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Naruto is ERC721, ERC721URIStorage, ERC721Pausable, Ownable, ERC721Burnable {
-    uint256 private _nextTokenId;
-
+    uint256 public _nextTokenId;
+    //通常部署这个合约的人 就把他认为是管理员了  我们这边假装合约是火影忍者系列的  所以就默认初始化好了
+    //如果是多种多样的nft  什么神奇宝贝杰尼龟，铁甲小宝，那名字跟符号就开放给他们自己输入  那么mint的方法也需要改一下
+    //还得增加名字跟符号的mapping等才能实现   比如还是继承这个erc721  只不过名字跟符号  定义的范围更大点 
+    //比如说  名字是动漫  Anime 符号是 A 然后里面的mapping  存的Naruto , NA 
+    //`initialOwner` → 合约 owner（控制合约权限）
+    // `safeMint(address to, ...)` 的 `to` → NFT token 的 owner
     constructor(address initialOwner)
         ERC721("Naruto", "NA")
         Ownable(initialOwner)
