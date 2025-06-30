@@ -8,18 +8,11 @@ import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.so
 import "hardhat/console.sol"; // 引入 Hardhat 控制台
 
 
-contract PriceOracle is Initializable{
+contract PriceOracleV3 is Initializable{
     AggregatorV3Interface public ethUsdPriceFeed;
     AggregatorV3Interface public usdcUsdPriceFeed;
     AggregatorV3Interface public daiUsdPriceFeed;
-    //AggregatorV3Interface public usdtUsdPriceFeed;
-/**
- * This Contract Similar Matches the deployed Bytecode at 0x1193F56f2dc46BB4b1BBb148f07587250766a5A7 , 
- * additional source code verification (with the current user credential) is temporarily unavailable.
- * 
- * This contract may be a proxy contract. Click on More Options and select Is this a proxy?
- *  to confirm and enable the "Read as Proxy" & "Write as Proxy" tabs.
- */
+    uint256 public newFeature; // 新增功能
     /**
      * ETH/USD
      * Sepolia  测试网预言机地址：
@@ -56,4 +49,18 @@ contract PriceOracle is Initializable{
         (, int256 price, , , ) = daiUsdPriceFeed.latestRoundData();
         return price;
     }
+
+    // 新增功能
+    function setNewFeature(uint256 _val) public  {
+        newFeature = _val;
+    }
+    // 新增功能
+    function getNewFeature() public view returns (uint256) {
+        return newFeature;
+    }
+    // 新增功能
+    function getNewFeature233() public view returns (uint256) {
+        return newFeature;
+    }
+
 }

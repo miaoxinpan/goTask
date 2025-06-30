@@ -1,0 +1,326 @@
+{
+  "manifestVersion": "3.2",
+  "proxies": [
+    {
+      "address": "0x7108AB181e071C6712A26bAaC4517cCb04851F1a",
+      "txHash": "0x9783a05cfd153f6bb45777576ac4e926c82faa069a98011ef4fba7b0feaed08f",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x86212d11940E08306EA2CE577f540F78dCFA5CdF",
+      "txHash": "0xf09a63864847a6a233d82fb9e27d05b83918ee6d981f0d4108ef19e99c5cbb2d",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x017D951fed563a88D3258EbE8044e57bFD080430",
+      "txHash": "0xed2e6fce52ce12d384fe2eeb629d7541a81fe63f09fcdb10554dadf0bc77d691",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x69EB9807eaEc6F546deb819bD4D88D5f304bd841",
+      "txHash": "0xfbbed2c9e22d3f7379a00a25cf913733a717ce971768f06e616965732bad8315",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xcdfF3abEf5420CA97Abb0a88bD8Ada5AE3E3EA20",
+      "txHash": "0xd8d45b1405a299f4aa6af26322a49ce9d8bd2ae6e58b5a9928f4515892f48e0d",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x3BdF1bd0e65F95e8d489AC97969be3E1528C43E4",
+      "txHash": "0xb563a17477bf1652d74a520bdfe2ff9a63a79ea50c883ba6a528035dd258b36b",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x10040552600d4BC18c93c983DdcD938606c74E3C",
+      "txHash": "0x96057b3fb3965d7aed80bf04fbcc271287e056df634aab20cc12bfc63d711b28",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xe71bfc7659A8Bb59DA30F93e52C1dE92EdbD7099",
+      "txHash": "0xcd0ec09bcbf32950766ae0daae9360570eff07e655ccc3e3ccd8ca60fb273ae0",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "12f0772a174176386bf9d775b75b7855d6c94923a27a01b3fdcdc86a24bf473f": {
+      "address": "0xc57E00fd41f16a51A0Ac5762729a516E011AE1aE",
+      "txHash": "0x9a652f7f72397433c90c25fdf5a3123052b298e0580fc7be5dbf78e88d50ec99",
+      "layout": {
+        "solcVersion": "0.8.28",
+        "storage": [
+          {
+            "label": "ethUsdPriceFeed",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(AggregatorV3Interface)45",
+            "contract": "PriceOracle",
+            "src": "contracts\\PriceOracle.sol:12"
+          },
+          {
+            "label": "usdcUsdPriceFeed",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_contract(AggregatorV3Interface)45",
+            "contract": "PriceOracle",
+            "src": "contracts\\PriceOracle.sol:13"
+          },
+          {
+            "label": "daiUsdPriceFeed",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_contract(AggregatorV3Interface)45",
+            "contract": "PriceOracle",
+            "src": "contracts\\PriceOracle.sol:14"
+          }
+        ],
+        "types": {
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)53_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_contract(AggregatorV3Interface)45": {
+            "label": "contract AggregatorV3Interface",
+            "numberOfBytes": "20"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "4fb3f63c3bdc5c95e092e0b295cee61b78f4d606b83b11af4b710e2a8f7d91eb": {
+      "address": "0x70a2dCa1DEb5efa6076998d8545490fF955E8AA5",
+      "txHash": "0xfc1c28aa9a333657ce0c88b5a56f3c7d1323ee425daebcd8f18c9df9136f0663",
+      "layout": {
+        "solcVersion": "0.8.28",
+        "storage": [
+          {
+            "label": "ethUsdPriceFeed",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(AggregatorV3Interface)45",
+            "contract": "PriceOracleV2",
+            "src": "contracts\\PriceOracleV2.sol:12"
+          },
+          {
+            "label": "usdcUsdPriceFeed",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_contract(AggregatorV3Interface)45",
+            "contract": "PriceOracleV2",
+            "src": "contracts\\PriceOracleV2.sol:13"
+          },
+          {
+            "label": "daiUsdPriceFeed",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_contract(AggregatorV3Interface)45",
+            "contract": "PriceOracleV2",
+            "src": "contracts\\PriceOracleV2.sol:14"
+          },
+          {
+            "label": "newFeature",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "PriceOracleV2",
+            "src": "contracts\\PriceOracleV2.sol:15"
+          }
+        ],
+        "types": {
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)53_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_contract(AggregatorV3Interface)45": {
+            "label": "contract AggregatorV3Interface",
+            "numberOfBytes": "20"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "b895d405a69f08f03b3b8c46999e5faeee5fe8cf6ddeec1694b876d133a580e3": {
+      "address": "0xddAd945E743342F5F8B67F9D903bFce4f72433cf",
+      "txHash": "0xaa0538c0ccaec129452965de69fef100ab882f6a6085b7fd4081b1f2be296330",
+      "layout": {
+        "solcVersion": "0.8.28",
+        "storage": [
+          {
+            "label": "ethUsdPriceFeed",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(AggregatorV3Interface)45",
+            "contract": "PriceOracleV3",
+            "src": "contracts\\PriceOracleV3.sol:12"
+          },
+          {
+            "label": "usdcUsdPriceFeed",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_contract(AggregatorV3Interface)45",
+            "contract": "PriceOracleV3",
+            "src": "contracts\\PriceOracleV3.sol:13"
+          },
+          {
+            "label": "daiUsdPriceFeed",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_contract(AggregatorV3Interface)45",
+            "contract": "PriceOracleV3",
+            "src": "contracts\\PriceOracleV3.sol:14"
+          },
+          {
+            "label": "newFeature",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "PriceOracleV3",
+            "src": "contracts\\PriceOracleV3.sol:15"
+          }
+        ],
+        "types": {
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)53_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_contract(AggregatorV3Interface)45": {
+            "label": "contract AggregatorV3Interface",
+            "numberOfBytes": "20"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
